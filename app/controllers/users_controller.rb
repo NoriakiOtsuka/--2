@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def show
-  	#@user = User.find(params[:id])
-    @user = current_user
+  	@user = User.find(params[:id])
   	@books = @user.books
   	@book = Book.new #new bookの新規投稿で必要（保存処理はbookコントローラー側で実施）
   end

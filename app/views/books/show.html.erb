@@ -1,19 +1,18 @@
 <div class="container">
-<div class="row">
-	<div class="col-xs-3">
+	<div class="row">
+		<div class="col-xs-3">
 
-		<h2>User info</h2>
-		<%= render 'users/profile', user: @user %>
+			<h2>User info</h2>
+			<%= render 'users/profile', user: @user %>
 
-		<h2>New book</h2>
-		<%= render 'books/newform', book: @book %>
+			<h2>New book</h2>
+			<%= render 'books/newform', book: @book %>
 
-	</div>
+		</div>
 
-	<div class="col-xs-9">
-		<h2>Book detail</h2>
-
-		<table class="table">
+		<div class="col-xs-9">
+			<h2>Book detail</h2>
+			<table class="table">
 				<tr>
 					<td>
 						<%= link_to (@book.user) do %>
@@ -23,13 +22,58 @@
 					</td>
 					<td><%= link_to @book.title, @book %></td>
 					<td><%= @book.body %></td>
+
+					<% if @book.favorited_by?(current_user) %>
+					<td>
+						<%= link_to book_favorites_path(@book), method: :delete do %>
+							<i class="fa fa-heart" aria-hidden="true" style="color: red;"></i>
+							<%= @book.favorites.count %>
+						<% end %>
+					</td>
+					<% else %>
+					<td>
+						<%= link_to book_favorites_path(@book), method: :post do %>
+							<i class="fa fa-heart-o" aria-hidden="true"></i>
+							<%= @book.favorites.count %>
+						<% end %>
+					</td>
+					<% end %>
+					<td>コメント数：<%= @book.book_comments.count %></td>
 					<% if @user.id == current_user.id %>
-						<td><%= link_to "Edit",edit_book_path(@book), class: "btn-sm btn-success edit_book_#{@book.id}" %></td>
-						<td><%= link_to "Destroy",@book, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{@book.id}" %></td>
+					<td><%= link_to "Edit",edit_book_path(@book), class: "btn-sm btn-success edit_book_#{@book.id}" %></td>
+					<td><%= link_to "Destroy",@book, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{@book.id}" %></td>
 					<% end %>
 				</tr>
 			</table>
+			<div>
+				<h2>New comment</h2>
+				<%= form_for [@book, @comment] do |f|%>
+					<%= f.text_area :comment %>
+					<%= f.submit "送信" %>
+				<% end %>
+			</div>
 
+			<div>
+				<h2>List of comments</h2>
+				<% @book.book_comments.each do |book_comment| %>
+				<div class="comment-body bb">
+					<div class="comment-text">
+						<div class="comment-author clearfix">
+							<span class="comment-meta">
+								<%= book_comment.user.name %>
+								<span class="comment-date"><%= book_comment.created_at.strftime('%Y/%m/%d') %></span>
+							</span>
+
+							<% if @user.id == current_user.id %>
+								<%= link_to "Destroy", book_book_comments_path(book_comment), method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{book_comment.id}" %>
+							<% end %>
+
+						</div>
+						<div class="comment-entry"><%= book_comment.comment %></div>
+					</div>
+				</div>
+				<% end %>
+			</div>
+		</div>
 	</div>
-</div>
 </div>
