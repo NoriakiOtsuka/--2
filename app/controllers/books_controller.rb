@@ -3,7 +3,7 @@ class BooksController < ApplicationController
 
   def show
     @book = Book.find(params[:id])
-    @user = @book.user
+    @user = @book.user #回答上いらんらしい
     @comment = BookComment.new
     @comments = BookComment.all
   end

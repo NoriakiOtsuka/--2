@@ -1,6 +1,5 @@
 <%= attachment_image_tag(user, :profile_image, :fill, 100, 100, fallback: "no_image.jpg") %>
 <table class="table">
-	<tr></tr>
 	<tr>
 		<th>name</th>
 		<th><%= current_user.name %></th>
@@ -9,9 +8,28 @@
 		<th>introduction</th>
 		<th><%= current_user.introduction %></th>
 	</tr>
+	<tr>
+		<th>follows</th>
+		<th><%= link_to user.followings.count, following_user_path(user) %></th>
+	</tr>
+	<tr>
+		<th>followers</th>
+		<th><%= link_to user.followers.count, followers_user_path(user) %></th>
+	</tr>
 </table>
-<div class="row">
-	<%= link_to '',edit_user_path(current_user), class: "col-xs-12 btn btn-default glyphicon glyphicon-wrench edit_user_#{current_user.id}" %>
-</div>
 
-<!-- 6,11,16行目のuserをcurrent_userで回避 -->
+<% if user == current_user %>
+	<div class="row">
+		<%= link_to '',edit_user_path(current_user), class: "col-xs-12 btn btn-default glyphicon glyphicon-wrench edit_user_#{current_user.id}" %>
+	</div>
+<% else %>
+	<% unless current_user?(@user) %>
+		<div id="follow_form">
+			<% if current_user.following?(@user) %>
+				<%= render "unfollow" %>
+			<% else %>
+				<%= render "follow" %>
+			<% end %>
+		</div>
+	<% end %>
+<% end %>

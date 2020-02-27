@@ -1,7 +1,7 @@
 class FavoritesController < ApplicationController
 	def create
 		book = Book.find(params[:book_id])
-		user = book.user
+		user = book.user #回答上いらないらしい
 		favorite = current_user.favorites.new(book_id: book.id) #currentがないと、前行の本のuser idが周り続け、showページでcurrent_userの定義があるから、他者のいいねを押すとelseが適用される。
 		favorite.save
 		if request.referer&.include?(book_path(book)) #遷移元へ戻るコード

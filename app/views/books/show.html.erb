@@ -48,7 +48,7 @@
 			<div>
 				<h2>New comment</h2>
 				<%= form_for [@book, @comment] do |f|%>
-					<%= f.text_area :comment %>
+					<%= f.text_area :comment, size: "90×5" %>
 					<%= f.submit "送信" %>
 				<% end %>
 			</div>
