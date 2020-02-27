@@ -9,14 +9,14 @@ class BooksController < ApplicationController
   end
 
   def index
-  	@books = Book.all #一覧表示するためにBookモデルの情報を全てくださいのall
+  	@books = Book.all
     @book = Book.new
   end
 
   def create
   	@book = Book.new(book_params) #Bookモデルのテーブルを使用しているのでbookコントローラで保存する。
     @book.user_id = current_user.id #作成するuserを定義
-  	if @book.save #入力されたデータをdbに保存する。
+  	if @book.save
   		redirect_to @book, notice: "successfully created book!"#保存された場合の移動先を指定。
   	else
   		@books = Book.all
